@@ -1,15 +1,40 @@
+
+int value = -1; // the number got from serial port messages
+int isReading = 0; // flag of reading number
+
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(115200);
 }
 
 // the loop function runs over and over again forever
 void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);                       // wait for a second
+  int finished = isReading;
+  getIntFromSerial();
+  finished -= isReading;
+  if(value >= 0 & finished == 1){
+    Serial.println(value);
+    Serial.flush();
+  }
 }
 
+void getIntFromSerial(){
+  if(Serial.available()){
+    char ch = Serial.read(); // read a byte, in another words, read a character.
+    if(ch == 'H'){
+      isReading = 1;
+      value = 0;
+      return;
+    }
+    int num_ch = ch - '0';
+    if(num_ch >= 0 && num_ch <= 9 && isReading){
+      value = value * 10 + num_ch;
+    }else{
+      isReading = 0;
+    }
+  }
+  return;
+}
 
 // sample functions
 void funcOne(){
