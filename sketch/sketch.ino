@@ -2,34 +2,48 @@
 int value = -1; // the number got from serial port messages
 int isReading = 0; // flag of reading number
 
-void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
-  Serial.begin(115200);
+void setup()
+{
+    pinMode(LED_BUILTIN, OUTPUT);
+    Serial.begin(115200);
 }
 
 // the loop function runs over and over again forever
-void loop() {
-  int finished = isReading;
-  getIntFromSerial();
-  finished -= isReading;
-  if(value >= 0 & finished == 1){
-    Serial.println(value);
-    Serial.flush();
-  }
+void loop()
+{
+    testGetIntFromSerial();
 }
 
-void getIntFromSerial(){
-  if(Serial.available()){
+void testGetIntFromSerial()
+{
+    // call this function in loop when you need to test getIntFromSerial()
+    int finished = isReading;
+    getIntFromSerial();
+    finished -= isReading;
+    if(value >= 0 & finished == 1){
+      Serial.println(value);
+      Serial.flush();
+    }
+}
+
+void getIntFromSerial()
+{
+  if(Serial.available())
+  {
     char ch = Serial.read(); // read a byte, in another words, read a character.
-    if(ch == 'H'){
+    if(ch == 'H')
+    {
       isReading = 1;
       value = 0;
       return;
     }
     int num_ch = ch - '0';
-    if(num_ch >= 0 && num_ch <= 9 && isReading){
+    if(num_ch >= 0 && num_ch <= 9 && isReading)
+    {
       value = value * 10 + num_ch;
-    }else{
+    }
+    else
+    {
       isReading = 0;
     }
   }
@@ -37,36 +51,39 @@ void getIntFromSerial(){
 }
 
 // sample functions
-void funcOne(){
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
+void funcOne()
+{
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(1000);
+    digitalWrite(LED_BUILTIN, LOW);
 }
 
-void funcTwo(){
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(500);
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);
-  digitalWrite(LED_BUILTIN, LOW);
+void funcTwo()
+{
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(500);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(500);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(500);
+    digitalWrite(LED_BUILTIN, LOW);
 }
 
-void funcThree(){
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(250);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(250);
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(250);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(250);
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(250);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(250);
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(250);
-  digitalWrite(LED_BUILTIN, LOW);
+void funcThree()
+{
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(250);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(250);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(250);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(250);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(250);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(250);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(250);
+    digitalWrite(LED_BUILTIN, LOW);
 }
