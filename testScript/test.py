@@ -6,7 +6,7 @@ DEVICE_NAME = "/dev/tty.usbmodem1411"
 BAUDRATE_FOR_DEVICE = 115200
 HEADER = "H"
 
-def wait_for_message():
+def wait_for_message(ser):
     """
     so ugly code.
     I should change to use async/await as soon as possible.
@@ -29,7 +29,7 @@ def get_int_from_serial(bit_num):
     # Arduino will return the dicimal number in the message
     ser.write(checker_message.encode(encoding='utf_8'))
     ser.flushOutput()
-    wait_for_message()
+    wait_for_message(ser)
     ret = ser.readline()
     print(checker_message, "->", ret)
     assert ret == (str(checker) + "\r\n").encode(encoding='utf_8'), \
@@ -39,7 +39,7 @@ def get_int_from_serial(bit_num):
     # int overflow will occur
     ser.write(upper_checker_message.encode(encoding='utf_8'))
     ser.flushOutput()
-    wait_for_message()
+    wait_for_message(ser)
     ret = ser.readline()
     print(upper_checker_message, "->", ret)
     assert ret != (str(checker) + "\r\n").encode(encoding='utf_8'), \
