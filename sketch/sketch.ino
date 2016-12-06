@@ -1,5 +1,5 @@
 
-int value = 0; // the number got from serial port messages
+int value = -1; // the number got from serial port messages
 int isReading = 0; // flag of reading number
 
 void setup() {
@@ -12,8 +12,9 @@ void loop() {
   int finished = isReading;
   getIntFromSerial();
   finished -= isReading;
-  if(value != 0 && finished){
+  if(value >= 0 & finished == 1){
     Serial.println(value);
+    Serial.flush();
   }
 }
 
