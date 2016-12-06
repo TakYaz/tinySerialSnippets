@@ -5,6 +5,7 @@ import time
 DEVICE_NAME = "/dev/tty.usbmodem1411"
 BAUDRATE_FOR_DEVICE = 115200
 HEADER = "H"
+FUNC_NUM = 3
 
 def wait_for_message(ser):
     """
@@ -15,10 +16,7 @@ def wait_for_message(ser):
         time.sleep(1) # so ugly! should use async/await
         print("wait for a message")
 
-def get_int_from_serial(bit_num):
-    ser = serial.Serial(DEVICE_NAME, BAUDRATE_FOR_DEVICE)
-    time.sleep(7); # so ugly! wait to connect
-
+def get_int_from_serial(bit_num, ser):
     # variables
     checker = random.randint(0, 2**bit_num - 1)
     upper_checker = 2**bit_num
@@ -46,7 +44,19 @@ def get_int_from_serial(bit_num):
         "error: edgecase (with too long message, \
         I expect Arduino serial buffer overflow)"
 
-    ser.close()
+def call_funcs_by_number(ser):
+    #variables
+    for num in range(FUNC_NUM):
+        message = HEADER + str(num) + ","
+        ser.write(message.encode(encoding='utf_8'))
+        wait_for_message(ser)
+        ret = ser.readline()
+        print(ret)
+        assert "func" in ret.decode("utf_8"), \
+            "error: function is not called by {!s}".format(message)
 
 if __name__ == '__main__':
-    get_int_from_serial(16)
+    ser = serial.Serial(DEVICE_NAME, BAUDRATE_FOR_DEVICE)
+    time.sleep(7); # so ugly! wait to connect
+    call_funcs_by_number(ser=ser)
+    ser.close()
